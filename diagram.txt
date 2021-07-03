@@ -1,0 +1,40 @@
+@startuml
+abstract class Server { 
+  + {abstract} get_entries(self,n_letters: int) 
+  + n_max_returned_entries: int
+}
+
+class MapServer {
+  + __init__(self, products: List[Product])
+  + get_entries(self, n_letters: int)
+  + self.products: List[Product]
+}
+
+class ListServer {
+  + __init__(self, products:List[Product])
+  + get_entries(self, n_letters: int)
+  + products: Dict[Product.name:Product]
+}
+class Client{
+  + __init__(self, server:server_type)
+  + server: server_type
+  + get_total_price(self, n_letters: Optional[int])
+}
+class TooManyProductsFoundError{
+  + __init__(self, amount)
+}
+class Product{
+  + __init__(self, name, price)
+  + __eq__(self, other)
+  + __hash__(self)
+  + self.name: str
+  + self.price: float
+}
+MapServer <|.. Server
+ListServer <|.. Server
+Server ..> TooManyProductsFoundError : << throws >>
+Client *-- Server
+Server "1" *-- "*" Product
+Server <|.. ABC
+TooManyProductsFoundError <|.. Exception
+@enduml
